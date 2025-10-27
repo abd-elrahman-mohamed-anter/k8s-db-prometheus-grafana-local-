@@ -9,7 +9,6 @@ This repository contains Kubernetes manifests and scripts to deploy the Spring P
 | File              | Description |
 |------------------|-------------|
 | `deploy.sh`       | Shell script to deploy all resources in order. |
-| `cleanup.sh`      | Shell script to delete all resources and clean the cluster. |
 | `petclinic.yml`   | Deployment and service for the Spring PetClinic application. |
 | `mysql1.yml`      | MySQL StatefulSet, secrets, PVC, exporter, and services. |
 | `prometheus.yml`  | Prometheus deployment and service. |
