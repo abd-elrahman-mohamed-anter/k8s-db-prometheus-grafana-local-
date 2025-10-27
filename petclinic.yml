@@ -29,7 +29,7 @@ spec:
             secretKeyRef:
               key: password
               name: demo-db
-        image: springpet-app:latest
+        image: your image
         imagePullPolicy: IfNotPresent
         name: app
         ports:
