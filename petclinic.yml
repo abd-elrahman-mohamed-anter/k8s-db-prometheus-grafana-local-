@@ -1,64 +1,46 @@
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: petclinic
-spec:
-  type: NodePort
-  ports:
-    - port: 80
-      targetPort: 8080
-  selector:
-    app: petclinic
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: petclinic
-  labels:
-    app: petclinic
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: petclinic
+  strategy: {}
   template:
     metadata:
       labels:
         app: petclinic
     spec:
       containers:
-        - name: workload
-          image: dsyer/petclinic
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: postgres
-            - name: SERVICE_BINDING_ROOT
-              value: /bindings
-            - name: SPRING_APPLICATION_JSON
-              value: |
-                {
-                  "management.endpoint.health.probes.add-additional-paths": true
-                }
-          ports:
-            - name: http
-              containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /livez
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: http
-          volumeMounts:
-            - mountPath: /bindings/secret
-              name: binding
-              readOnly: true
-      volumes:
-        - name: binding
-          projected:
-            sources:
-              - secret:
-                  name: demo-db
+      - env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: mysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://mysql:3306/petclinic
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: demo-db
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: demo-db
+        image: springpet-app:latest
+        imagePullPolicy: IfNotPresent
+        name: app
+        ports:
+        - containerPort: 8080
+        resources: {}
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - until nc -z mysql 3306; do echo "waiting for mysql"; sleep 5; done;
+        image: busybox:1.36
+        name: wait-for-mysql
+        resources: {}
+status: {}
