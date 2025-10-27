@@ -10,7 +10,7 @@ This repository contains Kubernetes manifests and scripts to deploy the Spring P
 |------------------|-------------|
 | `deploy.sh`       | Shell script to deploy all resources in order. |
 | `petclinic.yml`   | Deployment and service for the Spring PetClinic application. |
-| `mysql1.yml`      | MySQL StatefulSet, secrets, PVC, exporter, and services. |
+| `mysql.yml`      | MySQL StatefulSet, secrets, PVC, exporter, and services. |
 | `prometheus.yml`  | Prometheus deployment and service. |
 | `grafana.yml`     | Grafana deployment and service. |
 | `svc.yml`         | Additional service definitions (e.g., for PetClinic). |
@@ -77,7 +77,7 @@ minikube addons enable ingress
 Or manually:
 
 ```bash
-kubectl apply -f mysql1.yml
+kubectl apply -f mysql.yml
 kubectl apply -f petclinic.yml
 kubectl apply -f prometheus.yml
 kubectl apply -f grafana.yml
